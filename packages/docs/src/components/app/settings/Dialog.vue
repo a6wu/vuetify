@@ -1,24 +1,34 @@
 <template>
-  <v-dialog v-model="app.settings" :fullscreen="mobile">
+  <v-dialog
+    v-model="app.settings"
+    :fullscreen="mobile"
+    max-width="800"
+  >
     <v-card
+      :min-height="mobile ? '100%' : 650"
       :rounded="mobile ? 0 : 'lg'"
       class="mx-auto"
       elevation="24"
       flat
-      height="500"
-      max-width="800"
-      title="Documentation settings"
       width="100%"
     >
-      <template #append>
-        <v-icon
-          size="small"
+      <v-toolbar color="primary" class="ps-3 pe-4">
+        <v-icon icon="$vuetify" size="x-large" />
+
+        <v-toolbar-title class="ms-2">
+          Documentation settings
+        </v-toolbar-title>
+
+        <v-spacer />
+
+        <v-btn
+          class="me-n2"
           icon="$close"
+          size="x-small"
+          variant="text"
           @click="app.settings = false"
         />
-      </template>
-
-      <v-divider class="mt-4" />
+      </v-toolbar>
 
       <v-layout full-height>
         <v-navigation-drawer
@@ -67,15 +77,16 @@
         </v-navigation-drawer>
 
         <v-main>
-          <v-container class="pt-2 h-100">
+          <v-container class="pt-2 h-100 overflow-y-auto">
             <h3 class="text-h6 mb-2">{{ record?.title }}</h3>
 
-            <!-- <v-img
-              src="https://cdn.vuetifyjs.com/docs/images/graphics/img-placeholder.png"
+            <v-img
+              v-if="record.hero"
+              :height="mobile ? 100 : 220"
+              :src="`https://cdn.vuetifyjs.com/docs/images/settings/${record?.hero}.svg`"
               class="rounded-lg mb-4"
-              min-height="200"
               cover
-            /> -->
+            />
 
             <div class="text-body-2 mb-4">
               {{ record?.text }}
@@ -94,6 +105,7 @@
 <script setup>
   // Components
   import AppSettingsApi from '@/components/app/settings/Api.vue'
+  import AppSettingsCode from '@/components/app/settings/Code.vue'
   // import AppSettingsRtl from '@/components/app/settings/Rtl.vue'
   import AppOptions from '@/components/app/settings/Options.vue'
   import AppSettingsTheme from '@/components/app/settings/Theme.vue'
@@ -112,16 +124,25 @@
   const record = computed(() => items[model.value[0]])
   const items = [
     {
+      hero: 'theme',
       component: AppSettingsTheme,
       icon: 'mdi-palette-outline',
       title: 'Custom themes',
       text: 'Customize your documentation experience with light and dark themes, as well as a combination of both named "mixed".',
     },
     {
+      hero: 'api-tables',
       component: AppSettingsApi,
       icon: 'mdi-table',
       title: 'Inline API tables',
       text: 'Display API tables inline on documentation pages.',
+    },
+    {
+      hero: 'code',
+      component: AppSettingsCode,
+      icon: 'mdi-puzzle-outline',
+      title: 'Code display',
+      text: 'Determines the script shown in code examples for components.',
     },
     // {
     //   component: AppSettingsRtl,
@@ -130,6 +151,7 @@
     //   text: 'Customize your documentation experience with light and dark themes, as well as a combination of both named "mixed".',
     // },
     {
+      hero: 'about',
       component: AppOptions,
       icon: '$vuetify',
       title: 'About Vuetify',
