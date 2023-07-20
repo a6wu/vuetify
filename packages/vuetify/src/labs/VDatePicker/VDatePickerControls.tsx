@@ -32,7 +32,7 @@ export const makeVDatePickerControlsProps = propsFactory({
   },
   range: {
     default: false,
-    type: [String, Boolean],
+    type: [Boolean, String],
     validator: (v: any) => v === false || ['start', 'end'].includes(v),
   },
   ...omit(makeDateProps(), ['modelValue', 'inputMode']),
@@ -84,7 +84,7 @@ export const VDatePickerControls = genericComponent()({
           />
           <VSpacer />
           { (props.viewMode === 'month' && !props.range) && (
-            <div key="month-buttons">
+            <div class="v-date-picker-controls__month" key="month-buttons">
               { prevBtn }
               { nextBtn }
             </div>
